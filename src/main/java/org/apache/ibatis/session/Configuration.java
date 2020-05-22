@@ -178,6 +178,7 @@ public class Configuration {
     this.environment = environment;
   }
 
+  //mybatis解析配置文件的内容都会存放在configuration类中，configuration为mybatis运行提供相应的配置，并贯穿整个mybatis
   public Configuration() {
     typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
     typeAliasRegistry.registerAlias("MANAGED", ManagedTransactionFactory.class);

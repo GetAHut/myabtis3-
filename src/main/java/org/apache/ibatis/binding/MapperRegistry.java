@@ -64,11 +64,16 @@ public class MapperRegistry {
       }
       boolean loadCompleted = false;
       try {
+        //knownMappers 存放映射的容器
+        //type 是mapper的字节码对象
+        //MapperProxyFactory mapper的代理工厂类。
         knownMappers.put(type, new MapperProxyFactory<>(type));
         // It's important that the type is added before the parser is run
         // otherwise the binding may automatically be attempted by the
         // mapper parser. If the type is already known, it won't try.
+        //MapperAnnotationBuilder 优先解析xml文件。
         MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);
+        // mapper解析器
         parser.parse();
         loadCompleted = true;
       } finally {
@@ -91,6 +96,7 @@ public class MapperRegistry {
 
   /**
    * Adds the mappers.
+   * 添加映射关系
    *
    * @param packageName
    *          the package name

@@ -92,8 +92,11 @@ public class XMLMapperBuilder extends BaseBuilder {
 
   public void parse() {
     if (!configuration.isResourceLoaded(resource)) {
+      //解析mapper.xml文件  处理sql
       configurationElement(parser.evalNode("/mapper"));
+      // 给解析的resource文件增加flag标记
       configuration.addLoadedResource(resource);
+      //设置资源名。
       bindMapperForNamespace();
     }
 
@@ -106,18 +109,22 @@ public class XMLMapperBuilder extends BaseBuilder {
     return sqlFragments.get(refid);
   }
 
+  //解析配置， mapper.xml文件
   private void configurationElement(XNode context) {
     try {
       String namespace = context.getStringAttribute("namespace");
       if (namespace == null || namespace.isEmpty()) {
         throw new BuilderException("Mapper's namespace cannot be empty");
       }
+      //匹配namespace是否正确
       builderAssistant.setCurrentNamespace(namespace);
+      //缓存 没有返回空，使用默认一级缓存
       cacheRefElement(context.evalNode("cache-ref"));
       cacheElement(context.evalNode("cache"));
       parameterMapElement(context.evalNodes("/mapper/parameterMap"));
       resultMapElements(context.evalNodes("/mapper/resultMap"));
       sqlElement(context.evalNodes("/mapper/sql"));
+      //解析mapper中的sql
       buildStatementFromContext(context.evalNodes("select|insert|update|delete"));
     } catch (Exception e) {
       throw new BuilderException("Error parsing Mapper XML. The XML location is '" + resource + "'. Cause: " + e, e);
@@ -125,16 +132,20 @@ public class XMLMapperBuilder extends BaseBuilder {
   }
 
   private void buildStatementFromContext(List<XNode> list) {
+    //
     if (configuration.getDatabaseId() != null) {
       buildStatementFromContext(list, configuration.getDatabaseId());
     }
     buildStatementFromContext(list, null);
   }
 
+  //list -> mapper文件中的 sql语句集<select>...
   private void buildStatementFromContext(List<XNode> list, String requiredDatabaseId) {
     for (XNode context : list) {
       final XMLStatementBuilder statementParser = new XMLStatementBuilder(configuration, builderAssistant, context, requiredDatabaseId);
       try {
+        //statementParser 解析mapper.xml文件工具
+        //并解析sql，将#{}替换为'?'
         statementParser.parseStatementNode();
       } catch (IncompleteElementException e) {
         configuration.addIncompleteStatement(statementParser);

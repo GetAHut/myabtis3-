@@ -35,6 +35,8 @@ import org.apache.ibatis.session.Configuration;
 
 /**
  * @author Clinton Begin
+ *
+ * XMLStatementBuilder 用以解析mapper文件，主要解析namespace，parameterMap, resultMap以及各种sql
  */
 public class XMLStatementBuilder extends BaseBuilder {
 
@@ -93,8 +95,10 @@ public class XMLStatementBuilder extends BaseBuilder {
           ? Jdbc3KeyGenerator.INSTANCE : NoKeyGenerator.INSTANCE;
     }
 
+    //此处将 解析sql中的#{}, 并将其替换为'?'
     SqlSource sqlSource = langDriver.createSqlSource(configuration, context, parameterTypeClass);
     StatementType statementType = StatementType.valueOf(context.getStringAttribute("statementType", StatementType.PREPARED.toString()));
+    //fetchSize 批处理
     Integer fetchSize = context.getIntAttribute("fetchSize");
     Integer timeout = context.getIntAttribute("timeout");
     String parameterMap = context.getStringAttribute("parameterMap");
@@ -102,6 +106,7 @@ public class XMLStatementBuilder extends BaseBuilder {
     Class<?> resultTypeClass = resolveClass(resultType);
     String resultMap = context.getStringAttribute("resultMap");
     String resultSetType = context.getStringAttribute("resultSetType");
+    //结果集
     ResultSetType resultSetTypeEnum = resolveResultSetType(resultSetType);
     if (resultSetTypeEnum == null) {
       resultSetTypeEnum = configuration.getDefaultResultSetType();

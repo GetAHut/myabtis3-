@@ -113,8 +113,10 @@ public class MapperAnnotationBuilder {
   }
 
   public void parse() {
+    //type mapper的字节码对象
     String resource = type.toString();
     if (!configuration.isResourceLoaded(resource)) {
+      //设置flag 防止spring二次解析配置文件
       loadXmlResource();
       configuration.addLoadedResource(resource);
       assistant.setCurrentNamespace(type.getName());
@@ -162,6 +164,7 @@ public class MapperAnnotationBuilder {
     // Spring may not know the real resource name so we check a flag
     // to prevent loading again a resource twice
     // this flag is set at XMLMapperBuilder#bindMapperForNamespace
+    // 建立一个flag 防止资源文件2次加载
     if (!configuration.isResourceLoaded("namespace:" + type.getName())) {
       String xmlResource = type.getName().replace('.', '/') + ".xml";
       // #1347

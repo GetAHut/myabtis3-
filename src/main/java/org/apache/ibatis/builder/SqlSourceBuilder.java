@@ -39,6 +39,7 @@ public class SqlSourceBuilder extends BaseBuilder {
     super(configuration);
   }
 
+  //解析sql语句，并将 #{id}替换为占位符 '?'
   public SqlSource parse(String originalSql, Class<?> parameterType, Map<String, Object> additionalParameters) {
     ParameterMappingTokenHandler handler = new ParameterMappingTokenHandler(configuration, parameterType, additionalParameters);
     GenericTokenParser parser = new GenericTokenParser("#{", "}", handler);
