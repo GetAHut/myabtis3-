@@ -26,6 +26,9 @@ import java.util.Set;
 import org.apache.ibatis.reflection.ExceptionUtil;
 
 /**
+ * Plugin是mybatis插件 或者自定义插件 必须经过的核心类
+ *    用于给target创建一个JDk代理对象，触发intercept方法
+ *
  * @author Clinton Begin
  */
 public class Plugin implements InvocationHandler {
@@ -41,10 +44,12 @@ public class Plugin implements InvocationHandler {
   }
 
   public static Object wrap(Object target, Interceptor interceptor) {
+    //Map<Class<?>, Set<Method>> ----> 缓存需拦截对象的反射结果，避免多次反射，即target的反射结果
     Map<Class<?>, Set<Method>> signatureMap = getSignatureMap(interceptor);
     Class<?> type = target.getClass();
     Class<?>[] interfaces = getAllInterfaces(type, signatureMap);
     if (interfaces.length > 0) {
+      //创建jdk动态代理
       return Proxy.newProxyInstance(
           type.getClassLoader(),
           interfaces,
@@ -57,7 +62,9 @@ public class Plugin implements InvocationHandler {
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     try {
       Set<Method> methods = signatureMap.get(method.getDeclaringClass());
+      //判断是否有需要拦截的方法（重要）
       if (methods != null && methods.contains(method)) {
+        //回调intercept()
         return interceptor.intercept(new Invocation(target, method, args));
       }
       return method.invoke(target, args);

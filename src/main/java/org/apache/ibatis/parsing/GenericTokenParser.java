@@ -30,6 +30,7 @@ public class GenericTokenParser {
     this.handler = handler;
   }
 
+  //解析mapper中的sql语句 ，处理${} 直接替换
   public String parse(String text) {
     if (text == null || text.isEmpty()) {
       return "";
@@ -74,6 +75,7 @@ public class GenericTokenParser {
           builder.append(src, start, src.length - start);
           offset = src.length;
         } else {
+          //将${} 替换为传入的值
           builder.append(handler.handleToken(expression.toString()));
           offset = end + closeToken.length();
         }

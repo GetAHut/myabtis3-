@@ -33,6 +33,7 @@ public class DynamicSqlSource implements SqlSource {
     this.rootSqlNode = rootSqlNode;
   }
 
+  //处理sql中 ${}的情况。
   @Override
   public BoundSql getBoundSql(Object parameterObject) {
     DynamicContext context = new DynamicContext(configuration, parameterObject);

@@ -145,6 +145,7 @@ public class Configuration {
   protected Class<?> configurationFactory;
 
   protected final MapperRegistry mapperRegistry = new MapperRegistry(this);
+  //插件 拦截器执行链
   protected final InterceptorChain interceptorChain = new InterceptorChain();
   protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry(this);
   protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
@@ -556,6 +557,7 @@ public class Configuration {
   }
 
   /**
+   * 获取拦截器
    * Gets the interceptors.
    *
    * @return the interceptors

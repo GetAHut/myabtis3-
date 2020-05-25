@@ -46,7 +46,9 @@ import org.apache.ibatis.session.SqlSession;
  */
 public class MapperMethod {
 
+  //保存sql命令的类型和类ID
   private final SqlCommand command;
+  //保存mapper接口方法的解析信息
   private final MethodSignature method;
 
   public MapperMethod(Class<?> mapperInterface, Method method, Configuration config) {
@@ -56,6 +58,7 @@ public class MapperMethod {
 
   public Object execute(SqlSession sqlSession, Object[] args) {
     Object result;
+    //根绝类型去判断需要哪种执行器 SqlSession方法
     switch (command.getType()) {
       case INSERT: {
         Object param = method.convertArgsToSqlCommandParam(args);
@@ -218,8 +221,8 @@ public class MapperMethod {
 
   public static class SqlCommand {
 
-    private final String name;
-    private final SqlCommandType type;
+    private final String name;//
+    private final SqlCommandType type;//sql命令类型
 
     public SqlCommand(Configuration configuration, Class<?> mapperInterface, Method method) {
       final String methodName = method.getName();
