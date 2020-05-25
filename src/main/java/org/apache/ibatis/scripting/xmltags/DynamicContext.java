@@ -62,6 +62,7 @@ public class DynamicContext {
     bindings.put(name, value);
   }
 
+  //sql拼接
   public void appendSql(String sql) {
     sqlBuilder.add(sql);
   }

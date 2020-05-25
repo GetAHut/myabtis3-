@@ -807,6 +807,7 @@ public class Configuration {
     mapperRegistry.addMappers(packageName);
   }
 
+  //mapperRegistry 映射注册
   public <T> void addMapper(Class<T> type) {
     mapperRegistry.addMapper(type);
   }

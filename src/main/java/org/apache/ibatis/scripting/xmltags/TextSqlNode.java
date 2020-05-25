@@ -72,8 +72,10 @@ public class TextSqlNode implements SqlNode {
       if (parameter == null) {
         context.getBindings().put("value", null);
       } else if (SimpleTypeRegistry.isSimpleType(parameter.getClass())) {
+        //可以看出 在sql中可以使用value
         context.getBindings().put("value", parameter);
       }
+      //ognl TODO
       Object value = OgnlCache.getValue(content, context.getBindings());
       String srtValue = value == null ? "" : String.valueOf(value); // issue #274 return "" instead of "null"
       checkInjection(srtValue);

@@ -76,7 +76,8 @@ public class SqlSessionFactoryBuilder {
 
   public SqlSessionFactory build(InputStream inputStream, String environment, Properties properties) {
     try {
-      //解析mybatis的config文件
+      //解析mybatis的config文件，解析的内容会存放在configuration类中。
+      //解析mapper节点，添加对应映射
       XMLConfigBuilder parser = new XMLConfigBuilder(inputStream, environment, properties);
       return build(parser.parse());
     } catch (Exception e) {
