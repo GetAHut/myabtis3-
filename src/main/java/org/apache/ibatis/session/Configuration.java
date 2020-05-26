@@ -613,6 +613,15 @@ public class Configuration {
     return MetaObject.forObject(object, objectFactory, objectWrapperFactory, reflectorFactory);
   }
 
+  /**
+   *  interceptorChain.pluginAll() 该方法在创建ParameterHandler, ResultSetHandler, StatementHandler, Executor四个接口时调用，
+   *      其含义是给这些接口对象，注册拦截器功能，并不是执行拦截。
+   *      在plugin()方法注册拦截器成功后，在调用或执行上述4个接口对象内的具体方法时，就会自动触发拦截器的执行，也就是插件的执行。
+   * @param mappedStatement
+   * @param parameterObject
+   * @param boundSql
+   * @return
+   */
   public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
     ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
     parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
